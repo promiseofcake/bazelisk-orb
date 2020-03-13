@@ -1,0 +1,51 @@
+version: 2.1
+description: |
+  Bazelisk installer
+display:
+  home_url: https://github.com/promiseofcake/bazelisk-orb
+commands:
+  install:
+    description: |
+      Install Bazel (via Bazelisk) for use in a linux CircleCI Job
+    parameters:
+      install-dir:
+        default: /home/circleci/.local/bin
+        description: |
+          Directory in which to install bazelisk
+        type: string
+      version:
+        default: v1.3.0
+        description: |
+          Version of bazelisk to install, defaults to `v1.3.0`.
+        type: string
+    steps:
+    - run:
+        name: Install bazelisk
+        command: |
+          BAZEL_INSTALL_PATH=<<parameters.install-dir>>
+          BAZELISK_VERSION=<<parameters.version>>
+          mkdir -p $BAZEL_INSTALL_PATH
+
+          echo "Installing Bazelisk for Linux"
+          DEBIAN_BIN=bazelisk-linux-amd64
+          wget --no-clobber -O "${BAZEL_INSTALL_PATH}/bazel" "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/${DEBIAN_BIN}"
+          chmod +x "${BAZEL_INSTALL_PATH}/bazel"
+examples:
+  install:
+    description: |
+      Install bazelisk in a CircleCI job
+    usage:
+      jobs:
+        build:
+          docker:
+          - image: your-image
+          steps:
+          - checkout
+          - bazelisk-orb/install
+      orbs:
+        jq: promiseofcake/bazelisk-orb@0.1
+      version: 2.1
+      workflows:
+        your-workflow:
+          jobs:
+          - build
