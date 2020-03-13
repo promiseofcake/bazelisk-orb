@@ -28,7 +28,7 @@ commands:
 
           echo "Installing Bazelisk for Linux"
           DEBIAN_BIN=bazelisk-linux-amd64
-          wget --no-clobber -O "${BAZEL_INSTALL_PATH}/bazel" "https://github.com/bazelbuild/bazelisk/releases/download/v${BAZELISK_VERSION}/${DEBIAN_BIN}"
+          wget --no-clobber -O "${BAZEL_INSTALL_PATH}/bazel" "https://github.com/bazelbuild/bazelisk/releases/download/${BAZELISK_VERSION}/${DEBIAN_BIN}"
           chmod +x "${BAZEL_INSTALL_PATH}/bazel"
 examples:
   install:
