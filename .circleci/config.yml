@@ -1,0 +1,29 @@
+version: 2.1
+orbs:
+  orb-tools: circleci/orb-tools@9.1.0
+
+workflows:
+  build-and-test:
+    jobs:
+      - orb-tools/lint:
+          checkout: true
+      - orb-tools/publish-dev:
+          requires:
+            - orb-tools/lint
+          attach-workspace: false
+          checkout: true
+          orb-name: promiseofcake/bazelisk-orb
+          orb-path: orb.yml
+          publish-token-variable: CIRCLECI_DEV_API_TOKEN
+          publish-sha-version: true
+          validate: true
+  release-build:
+    jobs:
+      - orb-tools/increment:
+          orb-path: orb.yml
+          orb-ref: promiseofcake/bazelisk-orb
+          publish-token-variable: CIRCLECI_DEV_API_TOKEN
+          segment: minor
+          filters:
+            branches:
+              only: /master/
